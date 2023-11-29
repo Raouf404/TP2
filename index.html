@@ -5,23 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TP2</title>
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
   <main>
-    <span>2 </span>
+    <span id="num"></span>
     <h1>TO DO LIST</h1>
     <p>Saisissez quelque chose a faire et cliquez sur <span>Ajouter</span>.</p>
-    <form>
-      <input type="text" placeholder="Quelque chose à faire">
-      <input type="button" value="Ajouter">
+    <form id="adding">
+      <input id="text" type="text" placeholder="Quelque chose à faire">
+      <input id="add" type="button" value="Ajouter">
     </form>
-    <ul>
-      <li>Acheter du lait</li>
-      <li>Resoudre les bugs</li>
+    <ul id="list">
     </ul>
-    <form>
-      <input type="button" value="Clear">
-      <input type="button" value="Save">
+    <form id="buttons">
+      <input id="save" type="button" value="Save">
+      <input id="clear" type="button" value="Clear">
     </form>
   </main>
 </body>
