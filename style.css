@@ -4,12 +4,16 @@
   margin: 0;
   padding: 0;
 
-}body {
+}
+
+body {
   font-family: Arial, Helvetica, sans-serif;
 }
+
 ul {
   list-style: none;
 }
+
 form input[type=button] {
   cursor: pointer;
   padding: 8px 15px;
@@ -28,6 +32,7 @@ body {
   align-items: top;
   background-image: url(./images/todo-bg.png);
 }
+
 main {
   margin: 150px 0;
   width: 545px;
@@ -100,9 +105,11 @@ main form:first-of-type input[type=button] {
   background-position: center left 5px;
   background-color: #eee;
 }
+
 main form:first-of-type input[type=button]:hover {
   background-color: #D0D0D7;
 }
+
 main form:first-of-type input[type=button]:active {
   background-color: #B1B1B9;
 }
@@ -121,6 +128,14 @@ main ul li {
 
 main ul .new_li {
   background-color: lightpink;
+}
+
+main ul .delete {
+  background-image: url(./images/delete.png);
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: center right 5px;
+  /* background-color: #eee; */
 }
 
 main form:nth-of-type(2) input[type=button] {

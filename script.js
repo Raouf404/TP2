@@ -13,15 +13,29 @@ function update_num() {
     let n = list.childElementCount;
     num.innerHTML = n;
 }
-add.addEventListener('click', function() {
-    let todo = text.value;
-    if (todo != '') {
+
+function addTodo(todo) {
+    if (todo !== '') {
+        let new_p = document.createElement('p');
         let new_li = document.createElement('li');
-        new_li.innerHTML = todo;
+        new_p.innerHTML = todo;
+        new_li.appendChild(new_p);
         new_li.classList.add('new_li');
         list.appendChild(new_li);
     }
     update_num();
+}
+// Add the todo when clicking enter
+text.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        let todo = text.value;
+        addTodo(todo);
+    }
+})
+add.addEventListener('click', function() {
+    let todo = text.value;
+    addTodo(todo);
 })
 
 save.addEventListener('click', function() {
@@ -29,6 +43,8 @@ save.addEventListener('click', function() {
 
     Array.from(saved_li).forEach(function(li) {
         li.classList.remove('new_li');
+        li.classList.add('delete');
+
     });
     
     update_num();
