@@ -7,8 +7,6 @@ let num = document.getElementById('num'),
     clear = document.getElementById('clear'),
     save = document.getElementById('save'),
     list = document.getElementById('list');
-
-update_num();
 function update_num() {
     let n = list.childElementCount;
     num.innerHTML = n;
@@ -18,6 +16,9 @@ function addTodo(todo) {
     if (todo !== '') {
         let new_p = document.createElement('p');
         let new_li = document.createElement('li');
+        new_p.onclick = function() {
+            makeEditable(this);
+        };
         new_p.innerHTML = todo;
         new_li.appendChild(new_p);
         new_li.classList.add('new_li');
@@ -54,3 +55,28 @@ clear.addEventListener('click', function() {
     list.innerHTML = '';
     update_num();
 })
+
+function makeEditable(element) {
+    let inpt = document.createElement("input");
+    inpt.type = "text";
+    inpt.value = element.innerHTML;
+
+    // Replace the p with input text in the parent node
+    element.parentNode.replaceChild(inpt, element);
+
+    inpt.focus();
+
+    inpt.addEventListener("blur", function() {
+        // Replace the <input> element with a new <p> element
+        var newParagraph = document.createElement("p");
+        newParagraph.onclick = function() {
+            makeEditable(this);
+        };
+        newParagraph.innerText = inpt.value;
+        inpt.parentNode.replaceChild(newParagraph, inpt);
+    });
+}
+
+// Program here
+
+update_num();
