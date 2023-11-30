@@ -56,6 +56,16 @@ clear.addEventListener('click', function() {
     update_num();
 })
 
+function backToP(inpt) {
+    // Replace the <input> element with a new <p> element
+    let newParagraph = document.createElement("p");
+    newParagraph.onclick = function() {
+        makeEditable(this);
+    };
+    newParagraph.innerText = inpt.value;
+    inpt.parentNode.replaceChild(newParagraph, inpt);
+}
+
 function makeEditable(element) {
     let inpt = document.createElement("input");
     inpt.type = "text";
@@ -67,15 +77,17 @@ function makeEditable(element) {
     inpt.focus();
 
     inpt.addEventListener("blur", function() {
-        // Replace the <input> element with a new <p> element
-        var newParagraph = document.createElement("p");
-        newParagraph.onclick = function() {
-            makeEditable(this);
-        };
-        newParagraph.innerText = inpt.value;
-        inpt.parentNode.replaceChild(newParagraph, inpt);
+        backToP(inpt);
+    });
+
+    inpt.addEventListener("keypress", function(event) {
+        if (event.key === 'Enter') {
+            backToP(inpt);
+        }
     });
 }
+
+
 
 // Program here
 
