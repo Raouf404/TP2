@@ -21,7 +21,7 @@ function addTodo(todo) {
             makeEditable(this);
         };
         new_p.innerHTML = todo;
-        new_li.setAttribute('data-editable', true);
+        new_li.setAttribute('data-editable', false);
         new_li.appendChild(new_p);
         new_li.classList.add('new_li');
         list.appendChild(new_li);
@@ -40,7 +40,8 @@ text.addEventListener('keypress', function(e) {
     }
 })
 
-add.addEventListener('click', function() {
+add.addEventListener('click', function(e) {
+    e.preventDefault();
     let todo = text.value;
     addTodo(todo);
 })
@@ -55,7 +56,8 @@ list.addEventListener('click', function(event){
         update_num();
 }})
 
-save.addEventListener('click', function() {
+save.addEventListener('click', function(e) {
+    e.preventDefault();
     let saved_li = document.getElementsByClassName('new_li');
 
     Array.from(saved_li).forEach(function(li) {
@@ -66,7 +68,7 @@ save.addEventListener('click', function() {
         li.insertBefore(x_image,reference_node);
         li.classList.remove('new_li');
         li.classList.add('delete');
-        li.setAttribute('data-editable', false);
+        li.setAttribute('data-editable', true);
 
     });
     
@@ -99,6 +101,7 @@ function makeEditable(element) {
         // Replace the p with input text in the parent node
         element.parentNode.replaceChild(inpt, element);
 
+        inpt.classList.add('actve_li');
         inpt.focus();
 
         inpt.addEventListener("blur", function() {

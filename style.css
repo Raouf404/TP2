@@ -14,7 +14,8 @@ ul {
   list-style: none;
 }
 
-form input[type=button] {
+form input[type=submit],
+form input[type=reset] {
   cursor: pointer;
   padding: 8px 15px;
   border: 1px solid #999;
@@ -97,7 +98,7 @@ main form:first-of-type input[type=text] {
   -o-border-radius: 5px;
 }
 
-main form:first-of-type input[type=button] {
+main form:first-of-type input[type=submit] {
   padding-left: 24px;
   background-image: url(./images/add.png);
   background-size: 16px;
@@ -106,11 +107,11 @@ main form:first-of-type input[type=button] {
   background-color: #eee;
 }
 
-main form:first-of-type input[type=button]:hover {
+main form:first-of-type input[type=submit]:hover {
   background-color: #D0D0D7;
 }
 
-main form:first-of-type input[type=button]:active {
+main form:first-of-type input[type=submit]:active {
   background-color: #B1B1B9;
 }
 
@@ -127,19 +128,25 @@ main ul li {
 }
 
 main ul li:hover {
-  background-color: rgb(255, 236, 239);
+  background-color: rgb(252, 239, 241);
 }
 
-main ul li input{
+main ul .actve_li {
   border: none;
   outline: none;
-  background-color: rgb(255, 221, 226);
+  /* background-color: rgb(255, 221, 226); */
+
+  background-color: inherit;
   font-size: 16px;
-  width: 100%;
+  width: 80%;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 main ul .new_li {
+  background-color: rgb(255, 221, 226);
+}
+
+main ul .new_li:hover {
   background-color: rgb(255, 221, 226);
 }
 /*
@@ -152,12 +159,12 @@ main ul .delete {
 }
 */
 
-main ul li img{
+main ul li img {
   float : right;
   cursor: pointer;
   margin-right: 6px;
 }
-main form:nth-of-type(2) input[type=button] {
+main form:nth-of-type(2) input {
   float: right;
   margin-left: 10px;
 }
