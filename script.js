@@ -7,6 +7,7 @@ let num = document.getElementById('num'),
     clear = document.getElementById('clear'),
     save = document.getElementById('save'),
     list = document.getElementById('list');
+    
 function update_num() {
     let n = list.childElementCount;
     num.innerHTML = n;
@@ -20,9 +21,13 @@ function addTodo(todo) {
             makeEditable(this);
         };
         new_p.innerHTML = todo;
+        new_li.setAttribute('data-editable', true);
         new_li.appendChild(new_p);
         new_li.classList.add('new_li');
         list.appendChild(new_li);
+        text.value = '';
+        text.setAttribute('focus');
+        
     }
     update_num();
 }
@@ -34,17 +39,34 @@ text.addEventListener('keypress', function(e) {
         addTodo(todo);
     }
 })
+
 add.addEventListener('click', function() {
     let todo = text.value;
     addTodo(todo);
 })
 
+list.addEventListener('click', function(event){
+    if (event.target.tagName === 'IMG') {
+        // Get the parent node of the clicked image (container div)
+        var parent = event.target.parentNode;
+
+        // Remove the clicked image from the DOM
+        parent.remove();
+        update_num();
+}})
+
 save.addEventListener('click', function() {
     let saved_li = document.getElementsByClassName('new_li');
 
     Array.from(saved_li).forEach(function(li) {
+        let x_image = document.createElement("img");
+        x_image.src = 'images/delete.png';
+        x_image.classList.add("deleteButton")
+        let reference_node = li.firstChild;
+        li.insertBefore(x_image,reference_node);
         li.classList.remove('new_li');
         li.classList.add('delete');
+        li.setAttribute('data-editable', false);
 
     });
     
@@ -67,24 +89,27 @@ function backToP(inpt) {
 }
 
 function makeEditable(element) {
-    let inpt = document.createElement("input");
-    inpt.type = "text";
-    inpt.value = element.innerHTML;
+    let attr = element.parentNode.getAttribute('data-editable');
+    console.log(attr)
+    if (attr== 'true'){
+        let inpt = document.createElement("input");
+        inpt.type = "text";
+        inpt.value = element.innerHTML;
 
-    // Replace the p with input text in the parent node
-    element.parentNode.replaceChild(inpt, element);
+        // Replace the p with input text in the parent node
+        element.parentNode.replaceChild(inpt, element);
 
-    inpt.focus();
+        inpt.focus();
 
-    inpt.addEventListener("blur", function() {
-        backToP(inpt);
-    });
-
-    inpt.addEventListener("keypress", function(event) {
-        if (event.key === 'Enter') {
+        inpt.addEventListener("blur", function() {
             backToP(inpt);
-        }
-    });
+        });
+
+        inpt.addEventListener("keypress", function(event) {
+            if (event.key === 'Enter') {
+                backToP(inpt);
+            }
+        });};
 }
 
 
