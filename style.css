@@ -10,7 +10,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-ul {
+ol {
   list-style: none;
 }
 
@@ -115,56 +115,61 @@ main form:first-of-type input[type=submit]:active {
   background-color: #B1B1B9;
 }
 
-main ul {
+main ol {
   margin: 15px 0;
   padding-bottom: 15px;
   border-top: 1px solid #eee;
   border-bottom: 4px solid #5f97c0;
 }
 
-main ul li {
-  padding: 4px 0 4px 6px;
+main ol li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 4px 4px 6px;
   border-bottom: 1px solid #eee;
 }
 
-main ul li:hover {
+main ol li:hover {
   background-color: rgb(252, 239, 241);
+
+}
+main ol li:hover .delete {
+  visibility: visible;
 }
 
-main ul .actve_li {
-  border: none;
-  outline: none;
-  /* background-color: rgb(255, 221, 226); */
-
-  background-color: inherit;
-  font-size: 16px;
-  width: 80%;
-  font-family: Arial, Helvetica, sans-serif;
+main ol li p {
+  width: 90%;
 }
 
-main ul .new_li {
-  background-color: rgb(255, 221, 226);
-}
-
-main ul .new_li:hover {
-  background-color: rgb(255, 221, 226);
-}
-/*
-main ul .delete {
-  background-image: url(./images/delete.png);
-  background-size: 16px;
-  background-repeat: no-repeat;
-  background-position: center right 5px;
-  /* background-color: #eee; 
-}
-*/
-
-main ul li img {
-  float : right;
-  cursor: pointer;
-  margin-right: 6px;
-}
 main form:nth-of-type(2) input {
   float: right;
   margin-left: 10px;
+}
+
+/* Styling js elements */
+
+main ol li input {
+  width: 90%;
+  border: none;
+  outline: none;
+  background-color: inherit;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  overflow-wrap: break-word;
+}
+
+/* .new_li {
+  /* To be reactivated when using save button 
+  /* background-color: #ffdde2; 
+} */
+
+.delete {
+  height: 16px;
+  width: 16px;
+  background-image: url(./images/delete.png);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  visibility: hidden;
 }

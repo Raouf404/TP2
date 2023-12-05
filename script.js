@@ -1,122 +1,161 @@
-'use strict'
-let num = document.getElementById('num'),
-    add = document.getElementById('add'),
-    adding = document.getElementById('adding'),
-    text = document.getElementById('text'),
-    buttons = document.getElementById('buttons'),
-    clear = document.getElementById('clear'),
-    save = document.getElementById('save'),
-    list = document.getElementById('list');
-    
-function update_num() {
-    let n = list.childElementCount;
-    num.innerHTML = n;
+"use strict";
+
+// Global Variables
+
+let count = document.getElementById("count"),
+
+    adding_form = document.getElementById("adding"),
+    add = document.getElementById("add"),
+    text = document.getElementById("text"),
+
+    list = document.getElementById("list"),
+
+    clear_save_form = document.getElementById("clear-save"),
+    clear = document.getElementById("clear"),
+    save = document.getElementById("save");
+
+// --------------------------
+// Helper Functions
+// --------------------------
+
+function updateCount() {
+    count.innerHTML = list.childElementCount;
+    return count.innerHTML;
 }
 
 function addTodo(todo) {
-    if (todo !== '') {
-        let new_p = document.createElement('p');
-        let new_li = document.createElement('li');
-        new_p.onclick = function() {
-            makeEditable(this);
-        };
+    if (todo !== "") {
+        // Create new elements for the todo item
+        let new_p = document.createElement("p");
+        let new_li = document.createElement("li");
+        let deleteButton = document.createElement("button")
+
+        // Set the inner HTML and the id of the paragraph and append it alongside the button to the list item
         new_p.innerHTML = todo;
-        new_li.setAttribute('data-editable', false);
+        new_p.onclick = function() {
+            editable(this);
+        };
         new_li.appendChild(new_p);
-        new_li.classList.add('new_li');
+        new_li.appendChild(deleteButton);
+        new_li.id = `todo_${updateCount()}`;
+
+        deleteButton.classList.add("delete");
+
+        // Add classes and append the new list item to the list
+        new_li.classList.add("new_li");
         list.appendChild(new_li);
-        text.value = '';
-        text.setAttribute('focus');
-        
+
+        // Clear the input field and set focus
+        text.value = "";
+        text.setAttribute("focus", true);
     }
-    update_num();
+    // Update the count of todo items
+    updateCount();
 }
-// Add the todo when clicking enter
-text.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
+
+function editable(element) {
+    let inpt = document.createElement("input");
+    inpt.type = "text";
+    inpt.value = element.innerHTML;
+
+    // Replace the p with input text in the parent node
+    element.parentNode.replaceChild(inpt, element);
+
+    // inpt.classList.add("actve_li");
+    inpt.focus();
+
+    // Event listeners for blur and Enter key to save changes
+    inpt.addEventListener("blur", function() {
+        noneEditable(inpt);
+    });
+
+    inpt.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            noneEditable(inpt);
+        }
+    });
+}
+
+function noneEditable(element) {
+    let new_p = document.createElement("p");
+    new_p.onclick = function() {
+        editable(this);
+    };
+    new_p.innerHTML = element.value;
+    element.parentNode.replaceChild(new_p, element);
+    new_p.parentNode.classList.add("new_li");
+
+}
+
+// --------------------------
+// Main Functionality
+// --------------------------
+
+// Initializing the counter
+
+function mainFunction() {
+    updateCount();
+}
+
+// --------------------------
+// Event Listeners
+// --------------------------
+
+// Adding a todo
+add.addEventListener("click", function(event) {
+    // Preventing default behavior
+    event.preventDefault();
+    
+    let todo = text.value;
+    addTodo(todo);
+});
+text.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        // Preventing default behavior
+        event.preventDefault();
+
         let todo = text.value;
         addTodo(todo);
     }
+});
+
+// Saving
+save.addEventListener("click", function(event) {
+    // Preventing default behavior
+    event.preventDefault();
+
+    // Code here
+
+    updateCount();
 })
 
-add.addEventListener('click', function(e) {
-    e.preventDefault();
-    let todo = text.value;
-    addTodo(todo);
+// Clearing the list
+clear.addEventListener("click", function() {
+    list.innerHTML = "";
+    updateCount();
 })
 
-list.addEventListener('click', function(event){
-    if (event.target.tagName === 'IMG') {
-        // Get the parent node of the clicked image (container div)
-        var parent = event.target.parentNode;
-
-        // Remove the clicked image from the DOM
-        parent.remove();
-        update_num();
-}})
-
-save.addEventListener('click', function(e) {
-    e.preventDefault();
-    let saved_li = document.getElementsByClassName('new_li');
-
-    Array.from(saved_li).forEach(function(li) {
-        let x_image = document.createElement("img");
-        x_image.src = 'images/delete.png';
-        x_image.classList.add("deleteButton")
-        let reference_node = li.firstChild;
-        li.insertBefore(x_image,reference_node);
-        li.classList.remove('new_li');
-        li.classList.add('delete');
-        li.setAttribute('data-editable', true);
-
-    });
+// Manipulating the list items
+list.addEventListener("click", function(event) {
     
-    update_num();
+    // Deleting a list item
+    if (event.target.classList.contains("delete")) {
+        let parent = event.target.parentNode;
+        parent.remove();
+        updateCount();
+    }
+
+    // Up list item
+
+    // Down list item
 })
 
-clear.addEventListener('click', function() {
-    list.innerHTML = '';
-    update_num();
-})
-
-function backToP(inpt) {
-    // Replace the <input> element with a new <p> element
-    let newParagraph = document.createElement("p");
-    newParagraph.onclick = function() {
-        makeEditable(this);
-    };
-    newParagraph.innerText = inpt.value;
-    inpt.parentNode.replaceChild(newParagraph, inpt);
-}
-
-function makeEditable(element) {
-    let attr = element.parentNode.getAttribute('data-editable');
-    console.log(attr)
-    if (attr== 'true'){
-        let inpt = document.createElement("input");
-        inpt.type = "text";
-        inpt.value = element.innerHTML;
-
-        // Replace the p with input text in the parent node
-        element.parentNode.replaceChild(inpt, element);
-
-        inpt.classList.add('actve_li');
-        inpt.focus();
-
-        inpt.addEventListener("blur", function() {
-            backToP(inpt);
-        });
-
-        inpt.addEventListener("keypress", function(event) {
-            if (event.key === 'Enter') {
-                backToP(inpt);
-            }
-        });};
-}
+// Editing list elemtn s text
 
 
+// --------------------------
+// Program Execution
+// --------------------------
 
-// Program here
-
-update_num();
+// Call the main function to start the program
+mainFunction();
