@@ -111,16 +111,23 @@ function upDownCheck () {
             let upButton = document.createElement("button");
             upButton.classList.add("up");
             list_items[i].append(upButton);
+            let deleteButton = list_items[i].querySelector(".delete");
+            // Inserting up before delete
+            list_items[i].insertBefore(upButton, deleteButton);
+            
 
-            console.log('up');
+            console.log("up");
         }
         if (list_items[i].querySelector(".down") === null) {
 
             let downButton = document.createElement("button");
             downButton.classList.add("down");
             list_items[i].append(downButton);
+            let deleteButton = list_items[i].querySelector(".delete");
+            // Inserting down before delete
+            list_items[i].insertBefore(downButton, deleteButton);
 
-            console.log('down');
+            console.log("down");
         }
     }
 
