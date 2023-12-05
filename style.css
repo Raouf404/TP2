@@ -149,8 +149,9 @@ main form:nth-of-type(2) input {
 
 /* Styling js elements */
 
-main ol li input {
+main ol li textarea {
   width: 90%;
+  resize: none;
   border: none;
   outline: none;
   background-color: inherit;

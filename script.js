@@ -54,8 +54,8 @@ function addTodo(todo) {
 }
 
 function editable(element) {
-    let inpt = document.createElement("input");
-    inpt.type = "text";
+    let inpt = document.createElement("textarea");
+    inpt.setAttribute("wrap", "soft");
     inpt.value = element.innerHTML;
 
     // Replace the p with input text in the parent node
