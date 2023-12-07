@@ -114,6 +114,9 @@ function upDownCheck () {
             // Inserting down before delete
             list_items[i].insertBefore(downButton, deleteButton);
         }
+        let upButton = list_items[i].querySelector(".up");
+        let downButton = list_items[i].querySelector(".down");
+        list_items[i].insertBefore(upButton, downButton);
     }
 
     // Removes up for the first and down for the last
