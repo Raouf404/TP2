@@ -93,16 +93,6 @@ function noneEditable(element) {
 }
 
 function upDownCheck () {
-    // let first = list.firstElementChild.querySelector(".up");
-    // let last = list.lastElementChild.querySelector(".down");
-
-    // if (first != undefined) {
-    //     first.classList.remove("up");
-    // }
-    // if (last != undefined) {
-    //     last.classList.remove("down");
-    // }
-
     // Give all of the items up and down class
     let list_items = Array.from(list.children);
     for (let i = 0; i < list_items.length; i++) {
@@ -114,9 +104,6 @@ function upDownCheck () {
             let deleteButton = list_items[i].querySelector(".delete");
             // Inserting up before delete
             list_items[i].insertBefore(upButton, deleteButton);
-            
-
-            console.log("up");
         }
         if (list_items[i].querySelector(".down") === null) {
 
@@ -126,8 +113,6 @@ function upDownCheck () {
             let deleteButton = list_items[i].querySelector(".delete");
             // Inserting down before delete
             list_items[i].insertBefore(downButton, deleteButton);
-
-            console.log("down");
         }
     }
 
@@ -196,18 +181,25 @@ list.addEventListener("click", function(event) {
         let parent = event.target.parentNode;
         parent.remove();
         updateCount();
+        upDownCheck();
     }
 
     // Up list item
     if (event.target.classList.contains("up")) {
         let parent = event.target.parentNode;
-        console.log(`move ${parent.id} up`);
+
+        list.insertBefore(parent, parent.previousSibling);
+        
+        upDownCheck();
     }
 
     // Down list item
     if (event.target.classList.contains("down")) {
         let parent = event.target.parentNode;
-        console.log(`move ${parent.id} down`);
+
+        list.insertBefore(parent.nextElementSibling, parent);
+
+        upDownCheck();
     }
 
 })
