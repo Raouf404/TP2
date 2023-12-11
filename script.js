@@ -60,10 +60,23 @@ function addTodo(todo, todo_id) {
     saveCheck();
 }
 
+
+
 function editable(element) {
     let inpt = document.createElement("textarea");
     inpt.setAttribute("wrap", "soft");
+    inpt.setAttribute("spellcheck", "false");
     inpt.value = element.innerHTML;
+    
+    // Set the textarea size to match the size of the paragraph
+    inpt.style.width = element.offsetWidth + 'px';
+    inpt.style.height = element.offsetHeight + 'px';
+
+    
+    inpt.addEventListener('input', function () {
+        inpt.style.height = inpt.scrollHeight + 'px';
+        
+    });
 
     // Replace the p with input text in the parent node
     element.parentNode.replaceChild(inpt, element);
