@@ -2,28 +2,26 @@
 
 // Global Variables
 
-let id_counter = 0; // When using the server change this
+let id_counter;
 let count = document.getElementById("count"),
 
-    adding_form = document.getElementById("adding"),
     add = document.getElementById("add"),
     text = document.getElementById("text"),
 
     list = document.getElementById("list"),
 
-    clear_save_form = document.getElementById("clear-save"),
     clear = document.getElementById("clear"),
     save = document.getElementById("save");
 
-// --------------------------
+// ------------------------------------------------------------------------------
 // Helper Functions
-// --------------------------
+// ------------------------------------------------------------------------------
 
 function updateCount() {
     count.innerHTML = list.childElementCount;
 }
 
-function addTodo(todo) {
+function addTodo(todo, todo_id) {
     if (todo !== "") {
         // Create new elements for the todo item
         let new_p = document.createElement("p");
@@ -41,7 +39,9 @@ function addTodo(todo) {
         new_li.appendChild(upButton);
         new_li.appendChild(downButton);
         new_li.appendChild(deleteButton);
-        new_li.id = `todo_${id_counter++}`;
+        new_li.id = `todo_${todo_id}`;
+
+        new_li.setAttribute("draggable", "true");
 
         upButton.classList.add("up");
         downButton.classList.add("down");
@@ -57,6 +57,7 @@ function addTodo(todo) {
     }
     // Update the count of todo items
     updateCount();
+    saveCheck();
 }
 
 function editable(element) {
@@ -80,6 +81,7 @@ function editable(element) {
             noneEditable(inpt);
         }
     });
+    console.log("Editable working");
 }
 
 function noneEditable(element) {
@@ -90,56 +92,86 @@ function noneEditable(element) {
     new_p.innerHTML = element.value;
     element.parentNode.replaceChild(new_p, element);
     new_p.parentNode.classList.add("new_li");
+    saveCheck();
+    console.log("nonEditable working");
 }
 
 function upDownCheck () {
-    // Give all of the items up and down class
-    let list_items = Array.from(list.children);
-    for (let i = 0; i < list_items.length; i++) {
-        if (list_items[i].querySelector(".up") === null) {
+    if (list.childElementCount != 0) {
+        // Give all of the items up and down class
+        let list_items = Array.from(list.children);
+        for (let i = 0; i < list_items.length; i++) {
+            if (list_items[i].querySelector(".up") === null) {
 
-            let upButton = document.createElement("button");
-            upButton.classList.add("up");
-            list_items[i].append(upButton);
-            let deleteButton = list_items[i].querySelector(".delete");
-            // Inserting up before delete
-            list_items[i].insertBefore(upButton, deleteButton);
-        }
-        if (list_items[i].querySelector(".down") === null) {
+                let upButton = document.createElement("button");
+                upButton.classList.add("up");
+                list_items[i].append(upButton);
+                let deleteButton = list_items[i].querySelector(".delete");
+                // Inserting up before delete
+                list_items[i].insertBefore(upButton, deleteButton);
+            }
+            if (list_items[i].querySelector(".down") === null) {
 
-            let downButton = document.createElement("button");
-            downButton.classList.add("down");
-            list_items[i].append(downButton);
-            let deleteButton = list_items[i].querySelector(".delete");
-            // Inserting down before delete
-            list_items[i].insertBefore(downButton, deleteButton);
+                let downButton = document.createElement("button");
+                downButton.classList.add("down");
+                list_items[i].append(downButton);
+                let deleteButton = list_items[i].querySelector(".delete");
+                // Inserting down before delete
+                list_items[i].insertBefore(downButton, deleteButton);
+            }
+            let upButton = list_items[i].querySelector(".up");
+            let downButton = list_items[i].querySelector(".down");
+            list_items[i].insertBefore(upButton, downButton);
         }
-        let upButton = list_items[i].querySelector(".up");
-        let downButton = list_items[i].querySelector(".down");
-        list_items[i].insertBefore(upButton, downButton);
+
+        // Removes up for the first and down for the last
+        let first = list_items[0].querySelector(".up");
+        let last = list_items[list_items.length - 1].querySelector(".down");
+        
+        list_items[0].removeChild(first);
+        list_items[list_items.length - 1].removeChild(last);
     }
-
-    // Removes up for the first and down for the last
-    let first = list_items[0].querySelector(".up");
-    let last = list_items[list_items.length - 1].querySelector(".down");
-
-    list_items[0].removeChild(first);
-    list_items[list_items.length - 1].removeChild(last);
+    saveCheck();
 }
 
-// --------------------------
-// Main Functionality
-// --------------------------
+function saveCheck() {
+    if (localStorage.getItem("list") != list) {
+        save.classList.add("save-check");
+    }
+}
 
-// Initializing the counter
+function generateId() {
+    id_counter++;
+    return id_counter;
+}
+
+// ------------------------------------------------------------------------------
+// Main Functionality
+// ------------------------------------------------------------------------------
 
 function mainFunction() {
+    if (localStorage.getItem("id_counter") != undefined) {
+        id_counter = localStorage.getItem("id_counter");
+    } else {
+        id_counter = 0;
+    }
+
+    const savedList = localStorage.getItem("list");
+    if (savedList !== null) {
+        list.innerHTML = savedList;
+    }
+
+    let list_items = Array.from(list.children);
+    for (let i = 0; i < list_items.length; i++) {
+        list_items[i].classList.remove("new_li");
+    }
+
     updateCount();
 }
 
-// --------------------------
+// ------------------------------------------------------------------------------
 // Event Listeners
-// --------------------------
+// ------------------------------------------------------------------------------
 
 // Adding a todo
 add.addEventListener("click", function(event) {
@@ -147,8 +179,9 @@ add.addEventListener("click", function(event) {
     event.preventDefault();
     
     let todo = text.value;
-    addTodo(todo);
+    addTodo(todo, generateId());
     upDownCheck();
+    saveCheck();
 });
 text.addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
@@ -156,8 +189,9 @@ text.addEventListener("keypress", function(event) {
         event.preventDefault();
 
         let todo = text.value;
-        addTodo(todo);
+        addTodo(todo, generateId());
         upDownCheck();
+        saveCheck();
     }
 });
 
@@ -166,16 +200,24 @@ save.addEventListener("click", function(event) {
     // Preventing default behavior
     event.preventDefault();
 
-    // Code here
+    localStorage.setItem("id_counter", id_counter);
+    localStorage.setItem("list", list.innerHTML);
+    save.classList.remove("save-check");
+    let list_items = Array.from(list.children);
+    for (let i = 0; i < list_items.length; i++) {
+        list_items[i].classList.remove("new_li");
+    }
 
     updateCount();
-})
+});
 
 // Clearing the list
 clear.addEventListener("click", function() {
     list.innerHTML = "";
+    id_counter = 0;
     updateCount();
-})
+    saveCheck();
+});
 
 // Manipulating the list items
 list.addEventListener("click", function(event) {
@@ -184,31 +226,58 @@ list.addEventListener("click", function(event) {
         let parent = event.target.parentNode;
         parent.remove();
         updateCount();
-        upDownCheck();
     }
 
     // Up list item
-    if (event.target.classList.contains("up")) {
+    else if (event.target.classList.contains("up")) {
         let parent = event.target.parentNode;
 
         list.insertBefore(parent, parent.previousSibling);
-        
-        upDownCheck();
     }
 
     // Down list item
-    if (event.target.classList.contains("down")) {
+    else if (event.target.classList.contains("down")) {
         let parent = event.target.parentNode;
 
         list.insertBefore(parent.nextElementSibling, parent);
-
-        upDownCheck();
     }
+    upDownCheck();
+    saveCheck();
+});
 
-})
+// Dragging items
+// list.addEventListener("dragstart", (event)=> {
+//     setTimeout(() => event.target.classList.add("dragging"), 0);
+// });
+// list.addEventListener("dragend", (event)=> {
+//     event.target.classList.remove("dragging");
+// });
 
-// Editing list elemtn s text
+// const initSortableList = (e) => {
+//     e.preventDefault();
+//     const draggingItem = list.querySelector(".dragging");
+//     const siblings = [...list.querySelectorAll("li:not(.dragging)")];
 
+//     // let nextSibling = siblings.find(sibling => {
+//     //     return e.clientY <= sibling.offsetTop + sibling.offsetHeight / 2 ;
+//     // });
+
+//     let nextSibling = siblings.find(sibling => {
+//         // Calculate the midpoint of the sibling element, accounting for scroll position
+//         const siblingMidpoint = sibling.getBoundingClientRect().top + window.scrollY + sibling.offsetHeight / 2;
+    
+//         // Check if the mouse's Y-coordinate is above the midpoint
+//         return e.clientY <= siblingMidpoint;
+//     });
+
+//     console.log(e.clientY);
+//     list.insertBefore(draggingItem, nextSibling);
+//     upDownCheck();
+//     saveCheck();
+// }
+
+// list.addEventListener("dragover", initSortableList);
+// list.addEventListener("dragenter", e => e.preventDefault());
 
 // --------------------------
 // Program Execution

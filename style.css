@@ -164,11 +164,12 @@ main ol li textarea {
   overflow-wrap: break-word;
 }
 
-/* .new_li {
-  /* To be reactivated when using save button 
-  /* background-color: #ffdde2; 
-} */
-
+.new_li {
+  background-color: #ffdde2; 
+}
+.new_li:hover {
+  background-color: #ffdde2; 
+}
 
 .up,
 .down,
@@ -188,4 +189,10 @@ main ol li textarea {
 }
 .delete {
   background-image: url(./images/delete.png);
+}
+.dragging {
+  opacity: 0;
+}
+.save-check {
+  background-color: rgb(128, 209, 148);
 }
