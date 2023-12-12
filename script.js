@@ -185,6 +185,9 @@ function mainFunction() {
     let list_items = Array.from(list.children);
     for (let i = 0; i < list_items.length; i++) {
         list_items[i].classList.remove("new_li");
+        list_items[i].querySelector("p").onclick = function() {
+            editable(this);
+        };
     }
 
     updateCount();
