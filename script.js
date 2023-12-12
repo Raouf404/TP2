@@ -102,7 +102,6 @@ function editable(element) {
             }
         }
     });
-    // console.log("Editable working");
 }
 
 function noneEditable(element) {
@@ -113,7 +112,6 @@ function noneEditable(element) {
     new_p.innerHTML = element.value;
     element.parentNode.replaceChild(new_p, element);
     // new_p.parentNode.classList.add("new_li");
-    // console.log("nonEditable working");
     return new_p;
 }
 
@@ -156,8 +154,6 @@ function upDownCheck () {
 
 function saveCheck() {
     const savedList = localStorage.getItem("list");
-    console.log(savedList);
-    console.log(list.innerHTML);
 
     if (savedList !== list.innerHTML) {
         save.classList.add("save-check");
@@ -251,6 +247,7 @@ list.addEventListener("click", function(event) {
         let parent = event.target.parentNode;
         parent.remove();
         updateCount();
+        saveCheck();
     }
 
     // Up list item
@@ -258,6 +255,7 @@ list.addEventListener("click", function(event) {
         let parent = event.target.parentNode;
 
         list.insertBefore(parent, parent.previousSibling);
+        saveCheck();
     }
 
     // Down list item
@@ -265,6 +263,7 @@ list.addEventListener("click", function(event) {
         let parent = event.target.parentNode;
 
         list.insertBefore(parent.nextElementSibling, parent);
+        saveCheck();
     }
     upDownCheck();
 });
