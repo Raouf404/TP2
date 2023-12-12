@@ -86,15 +86,23 @@ function editable(element) {
 
     // Event listeners for blur and Enter key to save changes
     inpt.addEventListener("blur", function() {
-        noneEditable(inpt);
+        const edited_p = noneEditable(inpt);
+        if (element.innerHTML != edited_p.innerHTML) {
+            edited_p.parentNode.classList.add("new_li");
+            saveCheck();
+        }
     });
 
     inpt.addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
-            noneEditable(inpt);
+            const edited_p = noneEditable(inpt);
+            if (element.innerHTML != edited_p.innerHTML) {
+                edited_p.parentNode.classList.add("new_li");
+                saveCheck();
+            }
         }
     });
-    console.log("Editable working");
+    // console.log("Editable working");
 }
 
 function noneEditable(element) {
@@ -104,9 +112,9 @@ function noneEditable(element) {
     };
     new_p.innerHTML = element.value;
     element.parentNode.replaceChild(new_p, element);
-    new_p.parentNode.classList.add("new_li");
-    saveCheck();
-    console.log("nonEditable working");
+    // new_p.parentNode.classList.add("new_li");
+    // console.log("nonEditable working");
+    return new_p;
 }
 
 function upDownCheck () {
@@ -144,13 +152,17 @@ function upDownCheck () {
         list_items[0].removeChild(first);
         list_items[list_items.length - 1].removeChild(last);
     }
-    saveCheck();
 }
 
 function saveCheck() {
-    if (localStorage.getItem("list") != list) {
+    const savedList = localStorage.getItem("list");
+    console.log(savedList);
+    console.log(list.innerHTML);
+
+    if (savedList !== list.innerHTML) {
         save.classList.add("save-check");
     }
+
 }
 
 function generateId() {
@@ -255,7 +267,6 @@ list.addEventListener("click", function(event) {
         list.insertBefore(parent.nextElementSibling, parent);
     }
     upDownCheck();
-    saveCheck();
 });
 
 // Dragging items
