@@ -5,11 +5,13 @@
 let id_counter;
 let count = document.getElementById("count"),
 
+    adding = document.getElementById("adding"),
     add = document.getElementById("add"),
     text = document.getElementById("text"),
 
     list = document.getElementById("list"),
 
+    clear_save = document.getElementById("clear-save"),
     clear = document.getElementById("clear"),
     save = document.getElementById("save");
 
@@ -198,29 +200,18 @@ function mainFunction() {
 // ------------------------------------------------------------------------------
 
 // Adding a todo
-add.addEventListener("click", function(event) {
+adding.addEventListener("submit", function(event) {
     // Preventing default behavior
     event.preventDefault();
     
-    let todo = text.value;
+    let todo = text.value.trim();
     addTodo(todo, generateId());
     upDownCheck();
     saveCheck();
 });
-text.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        // Preventing default behavior
-        event.preventDefault();
-
-        let todo = text.value;
-        addTodo(todo, generateId());
-        upDownCheck();
-        saveCheck();
-    }
-});
 
 // Saving
-save.addEventListener("click", function(event) {
+clear_save.addEventListener("submit", function(event) {
     // Preventing default behavior
     event.preventDefault();
 
@@ -236,7 +227,7 @@ save.addEventListener("click", function(event) {
 });
 
 // Clearing the list
-clear.addEventListener("click", function() {
+clear_save.addEventListener("reset", function() {
     list.innerHTML = "";
     id_counter = 0;
     updateCount();
