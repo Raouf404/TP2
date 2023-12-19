@@ -159,6 +159,8 @@ function saveCheck() {
 
     if (savedList !== list.innerHTML) {
         save.classList.add("save-check");
+    } else if (savedList == localStorage.getItem("list")) {
+        save.classList.remove("save-check");
     }
 
 }
@@ -241,7 +243,7 @@ list.addEventListener("click", function(event) {
         let parent = event.target.parentNode;
         parent.remove();
         updateCount();
-        saveCheck();
+        // saveCheck();
     }
 
     // Up list item
@@ -249,7 +251,7 @@ list.addEventListener("click", function(event) {
         let parent = event.target.parentNode;
 
         list.insertBefore(parent, parent.previousSibling);
-        saveCheck();
+        // saveCheck();
     }
 
     // Down list item
@@ -257,9 +259,10 @@ list.addEventListener("click", function(event) {
         let parent = event.target.parentNode;
 
         list.insertBefore(parent.nextElementSibling, parent);
-        saveCheck();
+        // saveCheck();
     }
     upDownCheck();
+    saveCheck();
 });
 
 // Dragging items
