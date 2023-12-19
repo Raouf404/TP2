@@ -111,7 +111,7 @@ function noneEditable(element) {
     new_p.onclick = function() {
         editable(this);
     };
-    new_p.innerHTML = element.value;
+    new_p.innerHTML = element.value.trim();
     element.parentNode.replaceChild(new_p, element);
     // new_p.parentNode.classList.add("new_li");
     return new_p;
