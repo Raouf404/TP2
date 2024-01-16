@@ -5,11 +5,13 @@
 let id_counter;
 let count = document.getElementById("count"),
 
+    adding = document.getElementById("adding"),
     add = document.getElementById("add"),
     text = document.getElementById("text"),
 
     list = document.getElementById("list"),
 
+    clear_save = document.getElementById("clear-save"),
     clear = document.getElementById("clear"),
     save = document.getElementById("save");
 
@@ -18,7 +20,12 @@ let count = document.getElementById("count"),
 // ------------------------------------------------------------------------------
 
 function updateCount() {
-    count.innerHTML = list.childElementCount;
+    count.innerText = list.childElementCount;
+    if (count.innerText == "0") {
+        count.style.visibility = "hidden"
+    } else {
+        count.style.visibility = "visible";
+    }
 }
 
 function addTodo(todo, todo_id) {
@@ -41,7 +48,7 @@ function addTodo(todo, todo_id) {
         new_li.appendChild(deleteButton);
         new_li.id = `todo_${todo_id}`;
 
-        new_li.setAttribute("draggable", "true");
+        // new_li.setAttribute("draggable", "true");
 
         upButton.classList.add("up");
         downButton.classList.add("down");
@@ -109,9 +116,10 @@ function noneEditable(element) {
     new_p.onclick = function() {
         editable(this);
     };
-    new_p.innerHTML = element.value;
+    new_p.innerHTML = element.value.trim();
     element.parentNode.replaceChild(new_p, element);
     // new_p.parentNode.classList.add("new_li");
+    saveCheck();
     return new_p;
 }
 
@@ -157,6 +165,8 @@ function saveCheck() {
 
     if (savedList !== list.innerHTML) {
         save.classList.add("save-check");
+    } else if (savedList == localStorage.getItem("list")) {
+        save.classList.remove("save-check");
     }
 
 }
@@ -198,29 +208,19 @@ function mainFunction() {
 // ------------------------------------------------------------------------------
 
 // Adding a todo
-add.addEventListener("click", function(event) {
+adding.addEventListener("submit", function(event) {
     // Preventing default behavior
     event.preventDefault();
     
-    let todo = text.value;
+    let todo = text.value.trim();
     addTodo(todo, generateId());
+    text.value = '';
     upDownCheck();
     saveCheck();
 });
-text.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        // Preventing default behavior
-        event.preventDefault();
-
-        let todo = text.value;
-        addTodo(todo, generateId());
-        upDownCheck();
-        saveCheck();
-    }
-});
 
 // Saving
-save.addEventListener("click", function(event) {
+clear_save.addEventListener("submit", function(event) {
     // Preventing default behavior
     event.preventDefault();
 
@@ -236,7 +236,7 @@ save.addEventListener("click", function(event) {
 });
 
 // Clearing the list
-clear.addEventListener("click", function() {
+clear_save.addEventListener("reset", function() {
     list.innerHTML = "";
     id_counter = 0;
     updateCount();
@@ -250,7 +250,7 @@ list.addEventListener("click", function(event) {
         let parent = event.target.parentNode;
         parent.remove();
         updateCount();
-        saveCheck();
+        // saveCheck();
     }
 
     // Up list item
@@ -258,7 +258,7 @@ list.addEventListener("click", function(event) {
         let parent = event.target.parentNode;
 
         list.insertBefore(parent, parent.previousSibling);
-        saveCheck();
+        // saveCheck();
     }
 
     // Down list item
@@ -266,9 +266,10 @@ list.addEventListener("click", function(event) {
         let parent = event.target.parentNode;
 
         list.insertBefore(parent.nextElementSibling, parent);
-        saveCheck();
+        // saveCheck();
     }
     upDownCheck();
+    saveCheck();
 });
 
 // Dragging items
