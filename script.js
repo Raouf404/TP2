@@ -20,7 +20,12 @@ let count = document.getElementById("count"),
 // ------------------------------------------------------------------------------
 
 function updateCount() {
-    count.innerHTML = list.childElementCount;
+    count.innerText = list.childElementCount;
+    if (count.innerText == "0") {
+        count.style.visibility = "hidden"
+    } else {
+        count.style.visibility = "visible";
+    }
 }
 
 function addTodo(todo, todo_id) {
@@ -43,7 +48,7 @@ function addTodo(todo, todo_id) {
         new_li.appendChild(deleteButton);
         new_li.id = `todo_${todo_id}`;
 
-        new_li.setAttribute("draggable", "true");
+        // new_li.setAttribute("draggable", "true");
 
         upButton.classList.add("up");
         downButton.classList.add("down");
@@ -114,6 +119,7 @@ function noneEditable(element) {
     new_p.innerHTML = element.value.trim();
     element.parentNode.replaceChild(new_p, element);
     // new_p.parentNode.classList.add("new_li");
+    saveCheck();
     return new_p;
 }
 
@@ -208,6 +214,7 @@ adding.addEventListener("submit", function(event) {
     
     let todo = text.value.trim();
     addTodo(todo, generateId());
+    text.value = '';
     upDownCheck();
     saveCheck();
 });
